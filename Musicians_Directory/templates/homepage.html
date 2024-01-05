@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>The Musician Directory</h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Musician Name</th>
+      <th>Email</th>
+      <th>Phone number</th>
+      <th>Instrument Type</th>
+      <th>Album Name</th>
+      <th>Release Date</th>
+      <th>Ratings</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for musician in data %}
+    <tr>
+      <td>{{ musician.id }}</td>
+      <td><a href="{% url 'edit_musician' musician.id %}">{{ musician.First_Name }} {{ musician.Last_Name }}</a></td>
+      <td>{{ musician.Email }}</td>
+      <td>{{ musician.Phone_Number }}</td>
+      <td>{{ musician.Instrument_Type }}</td>
+      <td>
+        {% for album in musician.album_set.all %}
+        {{ album.Album_Name }}<br>
+        {% endfor %}
+      </td>
+      <td>
+        {% for album in musician.album_set.all %}
+        {{ album.Release_Date|date:"d-M-Y" }}<br>
+        {% endfor %}
+      </td>
+      <td>
+        {% for album in musician.album_set.all %}
+        {{ album.Ratings }}<br>
+        {% endfor %}
+      </td>
+      {% if user.is_authenticated %}
+      <td>
+        {% for album in musician.album_set.all %}
+        <a href="{% url 'edit_album' album.id %}" class="btn btn-primary">Edit</a> 
+        <a href="{% url 'delete_musician' album.id %}" class="btn btn-danger">Delete</a> 
+        {% endfor %}
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
